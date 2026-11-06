@@ -20,9 +20,11 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-
+          
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools'
 
       - name: Find and extract project ZIP
         run: |
