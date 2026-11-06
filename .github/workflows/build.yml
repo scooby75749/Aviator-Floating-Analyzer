@@ -35,6 +35,11 @@ jobs:
           PROJECT_DIR=$(find project -name settings.gradle.kts -printf '%h\n' | head -n 1)
           test -n "$PROJECT_DIR"
           echo "PROJECT_DIR=$PROJECT_DIR" >> $GITHUB_ENV
+                - name: Apply new Kotlin source files
+         run: |
+          if [ -d patch ]; then
+            cp -a patch/. "$PROJECT_DIR"/
+          fi
       - name: Fix Java and Kotlin targets
         run: |
           python3 - <<'PY'
