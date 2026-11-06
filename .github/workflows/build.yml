@@ -35,7 +35,33 @@ jobs:
           PROJECT_DIR=$(find project -name settings.gradle.kts -printf '%h\n' | head -n 1)
           test -n "$PROJECT_DIR"
           echo "PROJECT_DIR=$PROJECT_DIR" >> $GITHUB_ENV
+      - name: Fix Java and Kotlin targets
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
 
+          files = list(Path("project").glob("**/app/build.gradle.kts"))
+          assert files, "App Gradle file not found"
+
+          for f in files:
+              s = f.read_text()
+              if "jvmTarget" not in s:
+                  s = s.replace(
+                      "\n}\ndependencies {",
+                      """
+              compileOptions {
+                  sourceCompatibility = JavaVersion.VERSION_17
+                  targetCompatibility = JavaVersion.VERSION_17
+              }
+
+              kotlinOptions {
+                  jvmTarget = "17"
+              }
+          }
+          dependencies {""", 1
+                  )
+                  f.write_text(s)
+          PY
       - name: Install Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
