@@ -1,33 +1,32 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-}
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
-android {
-    namespace = "com.example.aviatorfloatinganalyzer"
-    compileSdk = 35
+    <application
+        android:allowBackup="true"
+        android:label="Aviator AI Analyzer"
+        android:supportsRtl="true"
+        android:theme="@android:style/Theme.Material.Light.NoActionBar">
 
-    defaultConfig {
-        applicationId = "com.example.aviatorfloatinganalyzer"
-        minSdk = 26
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
-    }
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
-    kotlinOptions {
-        jvmTarget = "17"
-    }
-}
+        </activity>
 
-dependencies {
-    implementation("androidx.core:core-ktx:1.15.0")
-    implementation("com.google.mlkit:text-recognition:16.0.1")
-}
-}
+        <service
+            android:name=".CaptureOverlayService"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection" />
+
+    </application>
+
+</manifest>
